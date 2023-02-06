@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "351215490903",
+    "project_id": "hakathon5jan",
+    "storage_bucket": "hakathon5jan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351215490903:android:a40d38f56de71910249012",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "351215490903-7qro0ie0jtod6c3ras0gsrnmqrq5ae58.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNefA2KCXNM_OZ6NSO3sA9ap2oAFAtdPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "351215490903-7qro0ie0jtod6c3ras0gsrnmqrq5ae58.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
