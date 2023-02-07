@@ -9,26 +9,25 @@ import 'package:flutter_application_1/widgets/text.dart';
 
 // ignore: must_be_immutable
 class CheckOut extends StatefulWidget {
-   CheckOut({super.key, required this.cartProducts,});
+   const CheckOut({super.key, this.cartProducts =const [],});
 
+  
+       final List<Map> cartProducts;
   // List<Map> products = [
   //   {"Pid": "1","image" : "assets/p1.png","Pname" : "WaterMelon Peproni","Price" : "Rs 350","IsFavourite" : false},
   //   {"Pid": "1","image" : "assets/p2.png","Pname" : "WaterMelon Shapater","Price" : "Rs 450","IsFavourite" : false},
   //   {"Pid": "1","image" : "assets/p3.png","Pname" : "Castus","Price" : "Rs 550","IsFavourite" : false},
   // ];
-      final List<Map> cartProducts;
-
   @override
   State<CheckOut> createState() => _CheckOutState();
 }
-
 class _CheckOutState extends State<CheckOut> {
       int count = 0;
       double totalPrice = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(    
       backgroundColor: AppColors.whiteColor,
       body: 
           Padding(
@@ -134,9 +133,11 @@ class _CheckOutState extends State<CheckOut> {
                                    ),
                                    SizedBox(width: 10,),
                                    InkWell(
-                                    onTap: (){
-                                      
-                                    },
+                                    // onTap: (){
+                                    //   setState(() {
+                                    //     widget.cartProducts.removeAt(index);
+                                    //   });
+                                    // },
                                     child: Icon(Icons.delete))
                                 ],)
                                 ],),
@@ -151,6 +152,7 @@ class _CheckOutState extends State<CheckOut> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     SizedBox(height: 10,),
+                                    
                                   textWidget(text: widget.cartProducts[index]['Price'],size: 15,color: AppColors.blackColor,)
                                   ],
                                 )

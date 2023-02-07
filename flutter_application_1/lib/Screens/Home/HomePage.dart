@@ -158,17 +158,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     itemBuilder: (context, index) {
                     return  Padding(
                 padding: EdgeInsets.only(top: topPadding),
-                child: InkWell(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => product(
-                       ProductInfoo: FavPro,
-                       index: index,
-                      //  imagesss : productss[index]["image"],
-                      // txt1111: productss[index]["Pname"],
-                      // txt2222: productss[index]["Price"],
-                    ),));
-                  },
-                  child: Container(
+                child: Container(
       width: 320,
       height: 250,
       decoration: BoxDecoration(
@@ -183,8 +173,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               width: 300,
                 height: 200,
                 decoration: BoxDecoration(
-                  color: Colors.greenAccent.withOpacity(0.4),
-                  borderRadius: BorderRadius.circular(20),
+                color: Colors.greenAccent.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(20),
                 ),
             ),
           ),
@@ -212,11 +202,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           Positioned(
             bottom: 30,
             right: -50,
-            child: Container(
-              height: 250,
-              width: 250,
-              decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage(productss[index]['image']))
+            child: InkWell(
+              onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => product(
+                       ProductInfoo: FavPro,
+                       index: index,
+                       images : productss[index]["image"],
+                      txt1111: productss[index]["Pname"],
+                      txt2222: productss[index]["Price"],
+                    ),));
+                  },
+              child: Container(
+                height: 250,
+                width: 250,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage(productss[index]['image']))
+                ),
               ),
             )),
             Positioned(
@@ -224,28 +225,28 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               left: 120,
               child: InkWell(
                onTap: () {
-                      if (!productss[index]['IsFavourite']) {
-                        // favouriteproduct.add(products[index]);
-                        setState(() {
-                          productss[index]['IsFavourite'] = true;
-                          productss.forEach((element) {
-                  if (element['IsFavourite']) {
-                    return FavPro.add(element);
-                  }
-                  print(FavPro);
+                    if (!productss[index]['IsFavourite']) {
+                      // favouriteproduct.add(products[index]);
+                      setState(() {
+                        productss[index]['IsFavourite'] = true;
+                        productss.forEach((element) {
+                if (element['IsFavourite'] == true) {
+                  return FavPro.add(element);
+                }
+                print(FavPro);
                 });
-                        });
-                      } else {
-                        FavPro.remove(productss[index]);
-                        setState(() {
-                          productss[index]['IsFavourite'] = false;
-                        });
-                      }
-                    },
+                      });
+                    } else {
+                      FavPro.remove(productss[index]);
+                      setState(() {
+                        productss[index]['IsFavourite'] = false;
+                      });
+                    }
+                  },
                 child: Icon(Icons.favorite,
-                      color: productss[index]['IsFavourite'] == true
-                          ? Colors.red
-                          : Colors.black,))),
+                    color: productss[index]['IsFavourite'] == true
+                        ? Colors.red
+                        : Colors.black,))),
               Positioned(
                 top: 160,
                 left: 180,
@@ -258,7 +259,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ))
         ],
       ),
-    )),
+    ),
                 );
                 },)),
               ),

@@ -4,14 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/CheckOut/Checkout.dart';
 import 'package:flutter_application_1/Screens/Drawer/Drawer.dart';
 import 'package:flutter_application_1/utills/const.dart';
-class product extends StatelessWidget {
-   product({super.key, required this.ProductInfoo, required this.index,});
-   final List<Map> ProductInfoo; 
+class product extends StatefulWidget {
+   product({super.key, required this.ProductInfoo, required this.index, required this.txt1111, required this.txt2222, required this.images,});
+   final List<Map> ProductInfoo;
    final int index;
+   final String txt1111;
+   final String txt2222;
+   final String images;
+
+  @override
+  State<product> createState() => _productState();
+}
+
+class _productState extends State<product> {
+   final List<Map> adToCart =[]; 
 
   @override
   Widget build(BuildContext context) {
-    print(index);
+    print(widget.index);
+    print(widget.ProductInfoo);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: l_green,
@@ -76,7 +87,7 @@ class product extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Text(ProductInfoo[index]['Pname'],style: TextStyle(fontSize: 20),),
+                      Text(widget.txt1111,style: TextStyle(fontSize: 20),),
                       SizedBox(
                         height: 10,
                       ),
@@ -85,7 +96,7 @@ class product extends StatelessWidget {
                      SizedBox(
                         height: 10,
                       ),
-                      Text(ProductInfoo[index]['Price'],style: TextStyle(fontSize: 15)),
+                      Text(widget.txt2222,style: TextStyle(fontSize: 15)),
                       
                      SizedBox(
                         height: 5,
@@ -115,13 +126,21 @@ class product extends StatelessWidget {
                   child: InkWell(
                 onTap: (){
                   //Navigator.push(context, MaterialPageRoute(builder: (context) => CheckOut(),));
-                },child: Image.asset(ProductInfoo[index]['image'],scale: 4,))),
+                },child: Image.asset(widget.images,scale: 4,))),
                   Positioned(
                     left: 40,
                     bottom: 0,
                     child: Row(
                       children: [
-                        Image.asset("assets/img/cart.png"),
+                        InkWell(
+                          onTap: (){
+                            ///////////////////////////////////////
+                            setState(() {
+                              adToCart.add(widget.ProductInfoo[widget.index]);
+                            print(adToCart);
+                            });
+                          },
+                          child: Image.asset("assets/img/cart.png")),
                         Image.asset("assets/img/heart.png")
                       ],
                     )
@@ -340,7 +359,7 @@ class product extends StatelessWidget {
         child: InkWell(
 onTap: (){
   Navigator.push(context, MaterialPageRoute(builder: (context) => CheckOut(
-    cartProducts: ProductInfoo,
+    cartProducts: adToCart,
   ),));
 },
 
@@ -354,8 +373,7 @@ onTap: (){
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.card_travel),
-                      Text("View 3 items")
+                      Icon(Icons.shopping_cart,size: 25,color: Colors.white,),
                     ],
                   ),
                 ),
