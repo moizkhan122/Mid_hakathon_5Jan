@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Screens/FirebaseServices/AuthCondition.dart';
+import 'package:flutter_application_1/Screens/FirebaseServices/SplashServices.dart';
 import 'package:flutter_application_1/Screens/loginPage/LoginPage.dart';
 import 'package:flutter_application_1/utills/Colors.dart';
 import 'package:flutter_application_1/widgets/ContainerButton.dart';

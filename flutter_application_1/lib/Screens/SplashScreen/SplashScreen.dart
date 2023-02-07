@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Screens/FirebaseServices/SplashServices.dart';
 import 'package:flutter_application_1/Screens/loginPage/LoginPage.dart';
 import 'package:flutter_application_1/utills/Colors.dart';
 import 'package:flutter_application_1/widgets/ContainerButton.dart';
@@ -13,13 +14,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  
+    SplashServices splashServices = SplashServices();
   @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   Timer(const Duration(seconds: 5),
-  //      () => Navigator.push(context, MaterialPageRoute(builder: ((context) => ()))));
-  //   super.initState();
-  // }
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    splashServices.islogin(context);
+  }
   
   @override
   Widget build(BuildContext context) {

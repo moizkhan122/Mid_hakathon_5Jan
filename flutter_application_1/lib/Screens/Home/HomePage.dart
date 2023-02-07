@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_application_1/Screens/Drawer/Drawer.dart';
+import 'package:flutter_application_1/Screens/FirebaseServices/SplashServices.dart';
 import 'package:flutter_application_1/Screens/ProductHome/product.dart';
+import 'package:flutter_application_1/Screens/loginPage/LoginPage.dart';
 import 'package:flutter_application_1/widget/ProductTile.dart';
 import 'package:flutter_application_1/widget/text.dart';
 import 'package:flutter_application_1/widget/textfield.dart';
@@ -28,6 +32,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
   }
+  final auth  = FirebaseAuth.instance;
   List<Map> FavPro = [];
 
   Widget build(BuildContext context) {
@@ -47,8 +52,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),),
         actions: [
           IconButton(onPressed: (){
-            
-          }, icon: Icon(Icons.notifications_none_outlined), color: Colors.black, iconSize: 30,),
+            auth.signOut().then((value){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+            }).onError((error, stackTrace){
+              SplashServices().ToastMessge(error);
+            });
+          }, icon: Icon(Icons.logout,size: 25,color: Colors.black,), color: Colors.black, iconSize: 30,),
           IconButton( onPressed: () {
                // List<Map> tempP = [];
                 
