@@ -24,6 +24,7 @@ class CheckOut extends StatefulWidget {
 
 class _CheckOutState extends State<CheckOut> {
       int count = 0;
+      double totalPrice = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +110,7 @@ class _CheckOutState extends State<CheckOut> {
                                     onTap: (){
                                       setState(() {
                                         count--;
+                                        totalPrice -= widget.cartProducts[index]['Price'];
                                       });
                                     },
                                     child: Icon(Icons.remove)),
@@ -124,6 +126,8 @@ class _CheckOutState extends State<CheckOut> {
                                     onTap: (){
                                       setState(() {
                                         count++;
+                                        totalPrice += widget.cartProducts[index]['Price'];
+                                        print(totalPrice.toString());
                                       });
                                     },
                                     child: Icon(Icons.add)),
@@ -199,11 +203,29 @@ class _CheckOutState extends State<CheckOut> {
                                     
                                   ),
                               ],),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                               SizedBox(width: 30,),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  textWidget(text: widget.cartProducts[0]['Price'],size: 20,color: AppColors.blackColor,),
+                                  textWidget(text: totalPrice.toString(),size: 20,color: AppColors.blackColor,),
                                 SizedBox(height: 30,),
                                 ],
                               )
@@ -229,7 +251,7 @@ class _CheckOutState extends State<CheckOut> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                             textWidget(text: "Total",size: 30,fontWeight: FontWeight.bold,color: AppColors.blackColor,),
-                            textWidget(text: widget.cartProducts[0]['Price'],size: 25,color: AppColors.blackColor,fontWeight: FontWeight.bold,)
+                            textWidget(text: totalPrice.toString(),size: 25,color: AppColors.blackColor,fontWeight: FontWeight.bold,)
                       ],),
                        SizedBox(height: 10,),
                       Row(

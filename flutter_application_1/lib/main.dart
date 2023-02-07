@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/CheckOut/Checkout.dart';
+import 'package:flutter_application_1/Screens/Home/HomePage.dart';
 import 'package:flutter_application_1/Screens/SplashScreen/SplashScreen.dart';
 import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/home.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home:  SplashScreen()
+      home:  HomePage()
     );
   }
 }

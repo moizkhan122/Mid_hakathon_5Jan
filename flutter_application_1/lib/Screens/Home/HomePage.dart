@@ -22,8 +22,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   //final TabController _tabcontroller = TabController(length: 5, vsync: this);
     List<Map> productss = [
     {"Pid": "1","image" : "assets/p1.png","Pname" : "WaterMelon Peproni","Price" : "Rs 350","IsFavourite" : false},
-    {"Pid": "1","image" : "assets/p2.png","Pname" : "WaterMelon Shapater","Price" : "Rs 450","IsFavourite" : false},
-    {"Pid": "1","image" : "assets/p3.png","Pname" : "Castus","Price" : "Rs 550","IsFavourite" : false}];
+    {"Pid": "2","image" : "assets/p3.png","Pname" : "WaterMelon Shapater","Price" : "Rs 450","IsFavourite" : false},
+    {"Pid": "3","image" : "assets/p2.png","Pname" : "Castus","Price" : "Rs 550","IsFavourite" : false}];
   @override
   void initState() {
     super.initState();
@@ -51,12 +51,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           }, icon: Icon(Icons.notifications_none_outlined), color: Colors.black, iconSize: 30,),
           IconButton( onPressed: () {
                // List<Map> tempP = [];
-                productss.forEach((element) {
-                  if (element['IsFavourite']) {
-                    return FavPro.add(element);
-                  }
-                  print(FavPro);
-                });
+                
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
@@ -201,7 +196,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           left: 20,
           ),
           Positioned(child: Text(productss[index]['Pname'], style: TextStyle(
-            fontSize: 40,
+            fontSize: 23,
             color: AppColors.Icon_color,
           ),),
           top: 80,
@@ -215,11 +210,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           left: 20,
           ),
           Positioned(
-            bottom: 50,
+            bottom: 30,
             right: -50,
             child: Container(
-              height: 200,
-              width: 200,
+              height: 250,
+              width: 250,
               decoration: BoxDecoration(
                 image: DecorationImage(image: AssetImage(productss[index]['image']))
               ),
@@ -233,6 +228,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         // favouriteproduct.add(products[index]);
                         setState(() {
                           productss[index]['IsFavourite'] = true;
+                          productss.forEach((element) {
+                  if (element['IsFavourite']) {
+                    return FavPro.add(element);
+                  }
+                  print(FavPro);
+                });
                         });
                       } else {
                         FavPro.remove(productss[index]);
