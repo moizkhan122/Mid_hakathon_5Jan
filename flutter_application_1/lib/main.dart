@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/CheckOut/Checkout.dart';
 import 'package:flutter_application_1/Screens/Home/HomePage.dart';
 import 'package:flutter_application_1/Screens/SplashScreen/SplashScreen.dart';
+import 'package:flutter_application_1/Screens/signPage/SignPage.dart';
 import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/home.dart';
 

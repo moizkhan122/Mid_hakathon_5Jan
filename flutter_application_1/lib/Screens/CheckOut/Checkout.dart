@@ -1,23 +1,20 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/Drawer/Drawer.dart';
+import 'package:flutter_application_1/Screens/FirebaseServices/SplashServices.dart';
 import 'package:flutter_application_1/Screens/OrderRecieve/OrderRecieve.dart';
+import 'package:flutter_application_1/Screens/SplashScreen/SplashScreen.dart';
 import 'package:flutter_application_1/utills/Colors.dart';
 import 'package:flutter_application_1/widgets/text.dart';
 
 
 // ignore: must_be_immutable
 class CheckOut extends StatefulWidget {
-   const CheckOut({super.key, this.cartProducts =const [],});
+   const CheckOut({super.key,});
 
-  
-       final List<Map> cartProducts;
-  // List<Map> products = [
-  //   {"Pid": "1","image" : "assets/p1.png","Pname" : "WaterMelon Peproni","Price" : "Rs 350","IsFavourite" : false},
-  //   {"Pid": "1","image" : "assets/p2.png","Pname" : "WaterMelon Shapater","Price" : "Rs 450","IsFavourite" : false},
-  //   {"Pid": "1","image" : "assets/p3.png","Pname" : "Castus","Price" : "Rs 550","IsFavourite" : false},
-  // ];
   @override
   State<CheckOut> createState() => _CheckOutState();
 }
@@ -69,17 +66,34 @@ class _CheckOutState extends State<CheckOut> {
                       decoration: BoxDecoration(
                         //color: AppColors.PurpleColor
                       ),
-                      child: ListView.builder(
+                      child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection('users_cart_item').doc(FirebaseAuth.instance.currentUser!.email).collection('items').snapshots(),
+                        builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if(snapshot.hasError){
+                            SplashServices().ToastMessge('Some Error');
+                          }
+                          return ListView.builder(
                         padding: EdgeInsets.symmetric(vertical: 10
                         ),
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
-                        itemCount: widget.cartProducts.length,
+                        itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
+                          DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
                         return Container(
                         height: 100, 
+                        margin: EdgeInsets.symmetric(vertical: 5),
                         width: double.infinity, 
-                        
+                        decoration: BoxDecoration(
+                           boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 0,
+                          blurRadius: 3,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                        ),
                         //color: AppColors.greyColor,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -88,7 +102,7 @@ class _CheckOutState extends State<CheckOut> {
                             margin: EdgeInsets.symmetric(horizontal: 0),
                             width: 90,
                             decoration: BoxDecoration(
-                              image: DecorationImage(image: AssetImage(widget.cartProducts[index]['image']),fit: BoxFit.cover),
+                              image: DecorationImage(image: NetworkImage(documentSnapshot['image']),fit: BoxFit.cover),
                               //color: AppColors.GreenColor
                               ),
                             ),
@@ -96,7 +110,7 @@ class _CheckOutState extends State<CheckOut> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  textWidget(text:widget.cartProducts[index]['Pname'],size: 16,color: AppColors.blackColor,),
+                                  textWidget(text:documentSnapshot['name'],size: 16,color: AppColors.blackColor,),
                                 SizedBox(height: 10,),
                                 Row(children: [
                                   Container(height: 25,
@@ -109,7 +123,7 @@ class _CheckOutState extends State<CheckOut> {
                                     onTap: (){
                                       setState(() {
                                         count--;
-                                        totalPrice -= widget.cartProducts[index]['Price'];
+                                       // totalPrice -= widget.cartProducts[index]['Price'];
                                       });
                                     },
                                     child: Icon(Icons.remove)),
@@ -125,7 +139,7 @@ class _CheckOutState extends State<CheckOut> {
                                     onTap: (){
                                       setState(() {
                                         count++;
-                                        totalPrice += widget.cartProducts[index]['Price'];
+                                        //totalPrice += widget.cartProducts[index]['Price'];
                                         print(totalPrice.toString());
                                       });
                                     },
@@ -153,13 +167,25 @@ class _CheckOutState extends State<CheckOut> {
                                   children: [
                                     SizedBox(height: 10,),
                                     
-                                  textWidget(text: widget.cartProducts[index]['Price'],size: 15,color: AppColors.blackColor,)
+                                  textWidget(text: (documentSnapshot['price']).toString(),size: 15,color: AppColors.blackColor,),
+                                  IconButton(
+                                    onPressed:(){
+                                      FirebaseFirestore.instance.collection('users_cart_item').doc(FirebaseAuth.instance.currentUser!.email).collection('items').doc(documentSnapshot.id).delete().then((value){
+                                        SplashServices().ToastMessge("item Deleted");
+                                      }).onError((error, stackTrace){
+                                        SplashServices().ToastMessge(error);
+                                      });
+                                    } , 
+                                    icon: Icon(Icons.remove_circle,color: Colors.black,size: 35,))
                                   ],
                                 )
                           ]),
                         );
-                      },),
-                      ),
+                      },);
+                        },),
+                     ),
+
+
                       SizedBox(height: 10,),
                       Row(
                         //mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -339,7 +365,7 @@ class _CheckOutState extends State<CheckOut> {
                         InkWell(
                           onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => OrderRecieved(),)),
                           child: textWidget(text: "CheckOut",size: 20,color: AppColors.whiteColor,fontWeight: FontWeight.bold,)),
-                        textWidget(text: widget.cartProducts[0]['Price'],size: 20,color: AppColors.whiteColor,fontWeight: FontWeight.bold,),
+                        textWidget(text: "12",size: 20,color: AppColors.whiteColor,fontWeight: FontWeight.bold,),
                       ]),
                     ),
                         height: 60,

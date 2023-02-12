@@ -1,28 +1,58 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/CheckOut/Checkout.dart';
 import 'package:flutter_application_1/Screens/Drawer/Drawer.dart';
+import 'package:flutter_application_1/Screens/Favourite/Favourite.dart';
+import 'package:flutter_application_1/Screens/FirebaseServices/SplashServices.dart';
 import 'package:flutter_application_1/utills/const.dart';
+import 'package:flutter_application_1/widget/text.dart';
 class product extends StatefulWidget {
-   product({super.key, required this.ProductInfoo, required this.index, required this.txt1111, required this.txt2222, required this.images,});
-   final List<Map> ProductInfoo;
-   final int index;
-   final String txt1111;
-   final String txt2222;
-   final String images;
+   product({super.key, required this.ProductInfoo});
+   var ProductInfoo;
 
   @override
   State<product> createState() => _productState();
 }
 
 class _productState extends State<product> {
-   final List<Map> adToCart =[]; 
+   
+   Future AddToCart()async{
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    var currentUser = auth.currentUser;
+    CollectionReference _collectionRef = FirebaseFirestore.instance.collection('users_cart_item');
+
+    return _collectionRef.doc(currentUser!.email).collection('items').doc().set({
+      'name' :widget.ProductInfoo['pName'],
+      'price' :widget.ProductInfoo['Price'],
+      'image' :widget.ProductInfoo['image'],
+    }).then((value){
+    SplashServices().ToastMessge("Added to cart");
+    }).onError((error, stackTrace){
+      SplashServices().ToastMessge(error);
+    });
+   }
+
+   Future AddToFavourite()async{
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    var currentUser = auth.currentUser;
+    CollectionReference _collectionRef = FirebaseFirestore.instance.collection('users_Fav_item');
+
+    return _collectionRef.doc(currentUser!.email).collection('Fav_items').doc().set({
+      'name' :widget.ProductInfoo['pName'],
+      'price' :widget.ProductInfoo['Price'],
+      'image' :widget.ProductInfoo['image'],
+    }).then((value){
+    SplashServices().ToastMessge("Added to Fav");
+    }).onError((error, stackTrace){
+      SplashServices().ToastMessge(error);
+    });
+   }
 
   @override
-  Widget build(BuildContext context) {
-    print(widget.index);
-    print(widget.ProductInfoo);
+  Widget build(BuildContext context,) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: l_green,
@@ -32,7 +62,10 @@ class _productState extends State<product> {
                 },child: Image.asset("assets/img/logo.png")),
         title: Text("Plantify"),
         actions: [
-          Icon(Icons.search),
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Favourite(),));
+          }, 
+          icon: Icon(Icons.favorite,size: 35,color: Colors.red,)),
           InkWell(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => drawer(),));
@@ -87,7 +120,7 @@ class _productState extends State<product> {
                           ),
                         ],
                       ),
-                      Text(widget.txt1111,style: TextStyle(fontSize: 20),),
+                      Text(widget.ProductInfoo['pName'],style: TextStyle(fontSize: 20),),
                       SizedBox(
                         height: 10,
                       ),
@@ -96,7 +129,7 @@ class _productState extends State<product> {
                      SizedBox(
                         height: 10,
                       ),
-                      Text(widget.txt2222,style: TextStyle(fontSize: 15)),
+                      Text("Rs : "+(widget.ProductInfoo['Price']).toString(),style: TextStyle(fontSize: 15)),
                       
                      SizedBox(
                         height: 5,
@@ -121,12 +154,19 @@ class _productState extends State<product> {
                     
                   )),
                 Positioned(
-                  bottom: 0,
-                  right: 0,
+                  bottom: 20,
+                  right: 27,
                   child: InkWell(
                 onTap: (){
                   //Navigator.push(context, MaterialPageRoute(builder: (context) => CheckOut(),));
-                },child: Image.asset(widget.images,scale: 4,))),
+                },child: Container(
+                  height:150,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    image: DecorationImage(image: NetworkImage(widget.ProductInfoo['image']),fit: BoxFit.cover)),
+                  
+                ))),
                   Positioned(
                     left: 40,
                     bottom: 0,
@@ -134,14 +174,24 @@ class _productState extends State<product> {
                       children: [
                         InkWell(
                           onTap: (){
-                            ///////////////////////////////////////
-                            setState(() {
-                              adToCart.add(widget.ProductInfoo[widget.index]);
-                            print(adToCart);
-                            });
+                           AddToCart();
                           },
                           child: Image.asset("assets/img/cart.png")),
-                        Image.asset("assets/img/heart.png")
+                        
+                          StreamBuilder(
+            stream: FirebaseFirestore.instance.collection('users_Fav_item').doc(FirebaseAuth.instance.currentUser!.email).collection('items').where('name',isEqualTo: widget.ProductInfoo['name']).snapshots(),
+            builder: (BuildContext context,AsyncSnapshot snapshot) {
+              if(snapshot.data == null){
+                return textWidget(text: " ");
+              }
+              return InkWell(
+                          onTap: ()=> snapshot.data.docs.length == 0 ? AddToFavourite() : SplashServices().ToastMessge("Already Added"),
+                          child:snapshot.data.docs.length == 0 ? 
+                          Icon(Icons.favorite_outline_outlined,color: Colors.black,): 
+                          Icon(Icons.favorite,color: Colors.red,));
+            },
+           ),
+          
                       ],
                     )
                     ),
@@ -356,30 +406,24 @@ class _productState extends State<product> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: d_green,
-        child: InkWell(
-onTap: (){
-  Navigator.push(context, MaterialPageRoute(builder: (context) => CheckOut(
-    cartProducts: adToCart,
-  ),));
-},
-
-          child: Container(
-            height: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  width: 150,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.shopping_cart,size: 25,color: Colors.white,),
-                    ],
-                  ),
+        child: Container(
+          height: 40,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: 150,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CheckOut(),)),
+                      child: Icon(Icons.shopping_cart,size: 25,color: Colors.white,)),
+                  ],
                 ),
-                Text("\$1090")
-              ],
-            ),
+              ),
+              Text("\$1090")
+            ],
           ),
         ),
       ),

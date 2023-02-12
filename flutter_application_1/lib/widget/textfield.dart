@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 
 import '../utills/utils/Colors.dart';
-class text_field extends StatelessWidget {
+class text_field extends StatefulWidget {
   var left_icon= null;
-  var right_icon=null;
   var Icon_color=null;
   String place_holder = "";
   String imagepath = "";
-  text_field({this.left_icon,this.imagepath="",this.Icon_color, this.place_holder=""});
+  final controler;
+  text_field({this.left_icon,this.imagepath="",this.Icon_color, this.place_holder="", this.controler});
+
+  @override
+  State<text_field> createState() => _text_fieldState();
+}
+
+class _text_fieldState extends State<text_field> {
+  var right_icon=null;
 
   @override
   Widget build(BuildContext context) {
-    String image = this.imagepath;
+    String image = this.widget.imagepath;
     print(image);
-    return TextField(
-                
+    return TextFormField(
+                controller: widget.controler,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(left_icon,color: Icon_color,),
+                 // onChanged
+                  prefixIcon: Icon(widget.left_icon,color: widget.Icon_color,),
                   suffix: Image.asset(image),
                   fillColor: Colors.white,
-                  hintText: place_holder,
+                  hintText: widget.place_holder,
                   filled: true,
                  border: OutlineInputBorder(
                   borderSide: BorderSide(
